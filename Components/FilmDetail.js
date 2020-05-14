@@ -1,10 +1,11 @@
 // Components/FilmDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
+import { connect } from 'react-redux'
 
 class FilmDetail extends React.Component {
   constructor(props) {
@@ -34,6 +35,27 @@ class FilmDetail extends React.Component {
     }
   }
 
+  _toggleFavorite() {
+    const action = {type: 'TOGGLE_FAVORITE', action: this.state.film}
+    // this.props.dispatch est possible car on a utilisé connect sur FilmDetail plus bas
+    this.props.dispatch(action)
+  }
+
+  _displayFavImage() {
+    console.log("fav", this.props.favoriteFilms)
+    /*
+    var sourceImage = require('../Images/ic_favorite_border.png')
+    if (this.props.favoriteFilms.findIndex(item => item.id === this.state.film.id) !== -1){
+      sourceImage = require('../Images/ic_favorite.png')
+    }
+    return (
+      <Image 
+        style={styles.fav_image} 
+        source={sourceImage}/>
+    )
+    */
+  }
+
   _displayFilm() {
     const { film } = this.state
     if (film != undefined) {
@@ -44,6 +66,11 @@ class FilmDetail extends React.Component {
             source={{uri: getImageFromApi(film.backdrop_path)}}
           />
           <Text style={styles.title_text}>{film.title}</Text>
+          <TouchableOpacity
+            style={styles.favorite_container}
+            onPress={() => this._toggleFavorite()}>
+              {this._displayFavImage()}
+          </TouchableOpacity>
           <Text style={styles.description_text}>{film.overview}</Text>
           <Text style={styles.default_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
           <Text style={styles.default_text}>Note : {film.vote_average} / 10</Text>
@@ -114,7 +141,19 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 5,
+  },
+  favorite_container: {
+    alignItems: 'center'
+  },
+  fav_image: {
+    width: 40,
+    height: 40
   }
 })
 
-export default FilmDetail
+const mapStateToProps = (state) => {
+  return {
+    favoriteFilms: state.favoriteFilms
+  }
+}
+export default connect(mapStateToProps)(FilmDetail)
