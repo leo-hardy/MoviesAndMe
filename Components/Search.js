@@ -3,6 +3,8 @@ import {StyleSheet, View, Button, TextInput, FlatList, ActivityIndicator} from '
 import FilmItem from './FilmItem'
 import { getFilmsFromApiWithSearchedText } from '../API/TMDBApi'
 
+import { connect } from 'react-redux'
+
 class Search extends React.Component {
 
     constructor(props){
@@ -70,6 +72,8 @@ class Search extends React.Component {
                 <Button style={{height: 50}} title={'Rechercher'} onPress={() => this._searchFilms()}/>
                 <FlatList
                     data={this.state.films}
+                    // extraData sert à reload la Flatlist quand favoritesFilm change
+                    extraData={this.props.favoritesFilm}
                     keyExtractor= {(item) => item.id.toString()}
                     // on gere le scroll infini
                     onEndReachedThreshold={0.5}
@@ -78,7 +82,14 @@ class Search extends React.Component {
                             this._loadFilms()
                         }
                     }}
-                    renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm}/>}
+                    renderItem={({item}) => 
+                        <FilmItem 
+                            film={item} 
+                            displayDetailForFilm={this._displayDetailForFilm}
+                            // Ajout d'une props isFilmFavorite pour indiquer à l'item d'afficher un 🖤 ou non
+                            isFilmFavorite={(this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false}
+                        />
+                    }
                 />
                 {this._displayLoading()}
             </View>
@@ -109,4 +120,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Search
+// associer les donnees du state global aux props dde Search
+const mapStateToProps = (state) => {
+    return {
+      favoritesFilm: state.favoritesFilm
+    }
+  }
+export default connect(mapStateToProps)(Search)
