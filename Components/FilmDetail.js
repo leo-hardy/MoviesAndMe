@@ -1,7 +1,7 @@
 // Components/FilmDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button } from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
@@ -36,16 +36,16 @@ class FilmDetail extends React.Component {
   }
 
   _toggleFavorite() {
-    const action = {type: 'TOGGLE_FAVORITE', action: this.state.film}
+    const action = {type: 'TOGGLE_FAVORITE', value: this.state.film}
     // this.props.dispatch est possible car on a utilisé connect sur FilmDetail plus bas
     this.props.dispatch(action)
   }
 
   _displayFavImage() {
-    console.log("fav", this.props.favoriteFilms)
+    console.log("fav", this.props.favoritesFilm)
     /*
     var sourceImage = require('../Images/ic_favorite_border.png')
-    if (this.props.favoriteFilms.findIndex(item => item.id === this.state.film.id) !== -1){
+    if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1){
       sourceImage = require('../Images/ic_favorite.png')
     }
     return (
@@ -54,6 +54,10 @@ class FilmDetail extends React.Component {
         source={sourceImage}/>
     )
     */
+  }
+
+  componentDidUpdate(){
+    console.log("update", this.props.favoritesFilm)
   }
 
   _displayFilm() {
@@ -66,11 +70,10 @@ class FilmDetail extends React.Component {
             source={{uri: getImageFromApi(film.backdrop_path)}}
           />
           <Text style={styles.title_text}>{film.title}</Text>
-          <TouchableOpacity
-            style={styles.favorite_container}
+          <Button
+            title="Favoris"
             onPress={() => this._toggleFavorite()}>
-              {this._displayFavImage()}
-          </TouchableOpacity>
+          </Button>
           <Text style={styles.description_text}>{film.overview}</Text>
           <Text style={styles.default_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
           <Text style={styles.default_text}>Note : {film.vote_average} / 10</Text>
@@ -151,9 +154,10 @@ const styles = StyleSheet.create({
   }
 })
 
+// associer les donnees du state global aux props dde FilmDetail
 const mapStateToProps = (state) => {
   return {
-    favoriteFilms: state.favoriteFilms
+    favoritesFilm: state.favoritesFilm
   }
 }
 export default connect(mapStateToProps)(FilmDetail)
