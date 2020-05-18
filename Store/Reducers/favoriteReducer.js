@@ -2,6 +2,7 @@
 
 const initialState = { favoritesFilm: [] }
 
+// on initialise le reducer avec le initialState
 function toggleFavorite(state = initialState, action) {
   let nextState
   switch (action.type) {

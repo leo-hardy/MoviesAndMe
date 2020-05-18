@@ -53,10 +53,6 @@ class FilmDetail extends React.Component {
     )
   }
 
-  componentDidUpdate(){
-    console.log("update", this.props.favoritesFilm)
-  }
-
   _displayFilm() {
     const { film } = this.state
     if (film != undefined) {

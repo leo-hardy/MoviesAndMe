@@ -3,13 +3,11 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import { getImageFromApi } from '../API/TMDBApi'
-import { connect } from 'react-redux'
-
 
 class FilmItem extends React.Component {
-/*
+
     _displayFavImage() {
-        if (this.props.favoriteFilms.findIndex(item => item.id === this.state.film.id) !== -1){
+        if (this.props.isFilmFavorite){
           sourceImage = require('../Images/ic_favorite.png')
           return (
             <Image 
@@ -19,7 +17,7 @@ class FilmItem extends React.Component {
         }
         return
       }
-      */
+      
 
     render() {
         const { film, displayDetailForFilm } = this.props
@@ -33,7 +31,7 @@ class FilmItem extends React.Component {
                 />
                 <View style={styles.content_container}>
                     <View style={styles.header_container}>
-                        {/*{this._displayFavImage() */}
+                        {this._displayFavImage()}
                         <Text style={styles.title_text}>{film.title}</Text>
                         <Text style={styles.vote_text}>{film.vote_average}</Text>
                     </View>
@@ -94,12 +92,12 @@ const styles = StyleSheet.create({
     date_text: {
         textAlign: 'right',
         fontSize: 14
+    },
+    fav_image: {
+        height: 25,
+        width: 25,
+        margin: 5,
     }
 })
 
-const mapStateToProps = (state) => {
-    return (
-      favoriteFilms = state.favoriteFilms
-    )
-  }
   export default FilmItem
