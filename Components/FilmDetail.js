@@ -1,19 +1,41 @@
 // Components/FilmDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity, Share, Platform } from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
 import { connect } from 'react-redux'
 
 class FilmDetail extends React.Component {
+
+  // on doit surcharger la navigation pour l'affichage de bouton dans la barre de navigation de iOS
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state
+    // On accède à la fonction shareFilm et au film via les paramètres qu'on a ajouté à la navigation
+    if (params.film != undefined && Platform.OS === 'ios') {
+      return {
+          // On a besoin d'afficher une image, il faut donc passe par une Touchable une fois de plus
+          headerRight: <TouchableOpacity
+                          style={styles.share_touchable_headerrightbutton}
+                          onPress={() => params.shareFilm()}>
+                          <Image
+                            style={styles.share_image}
+                            source={require('../Images/ic_share.png')} />
+                        </TouchableOpacity>
+      }
+    }
+}
+
   constructor(props) {
     super(props)
     this.state = {
       film: undefined,
       isLoading: true
     }
+  
+  // pour la navigation iOS
+  this._shareFilm = this._shareFilm.bind(this)
   }
 
   componentDidMount() {
@@ -23,17 +45,23 @@ class FilmDetail extends React.Component {
       this.setState({
         film: this.props.favoritesFilm[favoriteFilmIndex],
         isLoading: false
-      })
+      }, () => { this._updateNavigationParams()} )
       return
     }
-    // Le film n'est pas dans nos favoris, on n'a pas son détail
-    // On appelle l'API pour récupérer son détail
+    // Le film n'est pas dans nos favoris, on n'a pas son détail. On appelle l'API pour récupérer son détail
     this.setState({ isLoading: true })
     getFilmDetailFromApi(this.props.navigation.state.params.idFilm).then(data => {
       this.setState({
         film: data,
         isLoading: false
-      })
+      }, () => { this._updateNavigationParams()} )
+    })
+  }
+
+  _updateNavigationParams() {
+    this.props.navigation.setParams({
+      shareFilm: this._shareFilm,
+      film: this.state.film
     })
   }
 
@@ -65,6 +93,27 @@ class FilmDetail extends React.Component {
       />
     )
   }
+
+  _shareFilm() {
+    const { film } = this.state
+    Share.share({ title: film.title, message: film.overview })
+  }
+
+  _displayFloatingActionButton() {
+    // le floating action button est specifique a Android
+    const { film } = this.state
+    if (film != undefined && Platform.OS === 'android') { // Uniquement sur Android et lorsque le film est chargé
+      return (
+        <TouchableOpacity
+          style={styles.share_touchable_floatingactionbutton}
+          onPress={() => this._shareFilm()}>
+          <Image
+            style={styles.share_image}
+            source={require('../Images/ic_share.png')} />
+        </TouchableOpacity>
+      )
+    }
+}
 
   _displayFilm() {
     const { film } = this.state
@@ -102,8 +151,9 @@ class FilmDetail extends React.Component {
   render() {
     return (
       <View style={styles.main_container}>
-        {this._displayLoading()}
-        {this._displayFilm()}
+        { this._displayLoading() }
+        { this._displayFilm() }
+        { this._displayFloatingActionButton() }
       </View>
     )
   }
@@ -158,10 +208,28 @@ const styles = StyleSheet.create({
   fav_image: {
     width: 40,
     height: 40
+  },
+  share_touchable_floatingactionbutton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    right: 30,
+    bottom: 30,
+    borderRadius: 30,
+    backgroundColor: '#e91e63',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  share_image: {
+    width: 30,
+    height: 30
+  },
+  share_touchable_headerrightbutton: {
+    marginRight: 8
   }
 })
 
-// associer les donnees du state global aux props dde FilmDetail
+// associer les donnees du state global aux props de FilmDetail
 const mapStateToProps = (state) => {
   return {
     favoritesFilm: state.favoritesFilm
