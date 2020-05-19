@@ -1,7 +1,7 @@
 // Components/Test.js
 
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Platform } from 'react-native'
 
 class Test extends React.Component {
 
@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   subview_container: {
-    
+    backgroundColor: Platform.OS === 'ios' ? 'red': 'blue',
+    width: 50,
+    height: 50
+
   }
 })
 
