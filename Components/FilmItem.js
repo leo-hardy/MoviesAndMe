@@ -54,13 +54,17 @@ class FilmItem extends React.Component {
 const styles = StyleSheet.create({
     main_container: {
         height: 190,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        borderWidth: 0.5,
+        borderColor: 'black',
+        opacity: 0.7
     },
     image: {
         width: 120,
         height: 180,
         margin: 5,
-        backgroundColor: 'gray'
+        backgroundColor: 'gray',
     },
     content_container: {
         flex: 1,

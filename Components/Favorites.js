@@ -39,7 +39,7 @@ class Favorites extends React.Component {
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1
+    flex: 1,
   },
 })
 

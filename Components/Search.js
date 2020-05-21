@@ -67,7 +67,11 @@ class Search extends React.Component {
           onChangeText={(text) => this._searchTextInputChanged(text)}
           onSubmitEditing={() => this._searchFilms()}
         />
-        <Button title='Rechercher' onPress={() => this._searchFilms()}/>
+        <Button 
+          title='Rechercher' 
+          onPress={() => this._searchFilms()}
+          color="#fec16c"
+          />
         <FilmList
           films={this.state.films} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
           navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
@@ -84,15 +88,13 @@ class Search extends React.Component {
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'white'
   },
   textinput: {
-    marginLeft: 5,
-    marginRight: 5,
     height: 50,
-    borderColor: '#000000',
-    borderWidth: 1,
-    paddingLeft: 5
+    paddingLeft: 5,
+    backgroundColor: '#ffd06e',
   },
   loading_container: {
     position: 'absolute',
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
 })
 
 export default Search

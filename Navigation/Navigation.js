@@ -11,11 +11,17 @@ const SearchStackNavigator = createStackNavigator({
     Search: {
         screen: Search,
         navigationOptions: {
-            title: "Rechercher"
+            title: "Rechercher",
+            headerStyle: {
+                backgroundColor: '#fec16c'
+            }
         }
     },
     FilmDetail: {
         screen: FilmDetail,
+        navigationOptions: {
+            title: "Fiche du film"
+        }
     }
 })
 
@@ -23,13 +29,20 @@ const FavoriteStackNavigator = createStackNavigator({
     Favorites: {
         screen: Favorites,
         navigationOptions: {
-            title: "Favoris"
+            title: "Favoris",
+            headerStyle: {
+                backgroundColor: '#fc6362'
+            }
         }
     },
     FilmDetail: {
         screen: FilmDetail,
+        navigationOptions: {
+            title: "Fiche du film",
+        }
     }
 })
+
 
 const MoviesTabNavigator = createBottomTabNavigator({
     Search: {
@@ -39,7 +52,13 @@ const MoviesTabNavigator = createBottomTabNavigator({
               return <Image 
                         source={require('../Images/ic_search.png')} 
                         style={styles.icon} />
-          }
+          },
+          tabBarOptions: {
+            showLabel: false,
+            showIcon: true,
+            activeBackgroundColor: '#fec16c',
+            inactiveBackgroundColor: '#FFFFFF'
+        }
       }
     },
     Favorites: {
@@ -49,17 +68,16 @@ const MoviesTabNavigator = createBottomTabNavigator({
             return <Image 
                       source={require('../Images/ic_favorite.png')} 
                       style={styles.icon} /> 
+            },
+            tabBarOptions: {
+                showLabel: false,
+                showIcon: true,
+                activeBackgroundColor: '#fc6362',
+                inactiveBackgroundColor: '#FFFFFF'
             }
         }
     }
-  }, {
-      tabBarOptions: {
-          showLabel: false,
-          showIcon: true,
-          activeBackgroundColor: '#DDDDDD',
-          inactiveBackgroundColor: '#FFFFFF'
-      }
-  })
+})
 
   const styles = StyleSheet.create({
       icon: {
