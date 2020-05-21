@@ -6,6 +6,7 @@ import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
 import { connect } from 'react-redux'
+import EnlargeShrink from '../Animations/EnlargeShrink'
 
 class FilmDetail extends React.Component {
 
@@ -82,15 +83,20 @@ class FilmDetail extends React.Component {
   }
 
   _displayFavImage() {
+    var isBigImage = false
     var sourceImage = require('../Images/ic_favorite_border.png')
     if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1){
+      isBigImage = true
       sourceImage = require('../Images/ic_favorite.png')
     }
     return (
-      <Image 
-        style={styles.fav_image} 
-        source={sourceImage}
-      />
+      <EnlargeShrink shouldEnlarge={ isBigImage }>
+        <Image 
+          style={styles.fav_image} 
+          source={sourceImage}
+        />
+      </EnlargeShrink>
+      
     )
   }
 
@@ -206,8 +212,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   fav_image: {
-    width: 40,
-    height: 40
+    flex: 1,
+    width: null,
+    height: null
   },
   share_touchable_floatingactionbutton: {
     position: 'absolute',
