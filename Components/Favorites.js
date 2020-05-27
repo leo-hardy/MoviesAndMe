@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatar_container: {
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#fdb0b0'
   }
 })
 
