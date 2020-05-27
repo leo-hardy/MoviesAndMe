@@ -23,8 +23,8 @@ function toggleFavorite(state = initialState, action) {
         }
       }
       return nextState || state
-  default:
-    return state
+    default:
+      return state
   }
 }
 

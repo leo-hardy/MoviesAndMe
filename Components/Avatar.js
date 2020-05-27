@@ -3,14 +3,13 @@
 import React from 'react'
 import { StyleSheet, Image, TouchableOpacity } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
+import { connect } from 'react-redux'
 
 class Avatar extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      avatar: require('../Images/ic_tag_faces.png')
-    }
+
     // this.setState est appelé dans un callback dans showImagePicker, pensez donc bien à binder la fonction _avatarClicked
     this._avatarClicked = this._avatarClicked.bind(this)
   }
@@ -24,11 +23,11 @@ class Avatar extends React.Component {
           console.log('Erreur : ', response.error)
         }
         else {
-          console.log('Photo : ', response.uri )
-          let requireSource = { uri: response.uri }
-          this.setState({
-            avatar: requireSource
-          })
+            console.log('Photo : ', response.uri )
+            let requireSource = { uri: response.uri }
+            const action = {type:'CHANGE_PICTURE', value: requireSource}
+            // this.props.dispatch est possible car on a utilisé connect plus bas
+            this.props.dispatch(action)
         }
       })
   }
@@ -38,7 +37,7 @@ class Avatar extends React.Component {
       <TouchableOpacity
         style={styles.touchableOpacity}
         onPress={this._avatarClicked}>
-          <Image style={styles.avatar} source={this.state.avatar} />
+          <Image style={styles.avatar} source={this.props.avatar} />
       </TouchableOpacity>
     )
   }
@@ -61,4 +60,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Avatar
+const mapStateToProps = state => {
+    return {
+      avatar: state.setAvatar.avatar
+    }
+  }
+
+export default connect(mapStateToProps)(Avatar)
