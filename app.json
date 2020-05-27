@@ -1,4 +1,6 @@
 {
+  "name": "MoviesAndMe",
+  "displayName": "MoviesAndMe",
   "expo": {
     "name": "MoviesAndMe",
     "slug": "MoviesAndMe",
