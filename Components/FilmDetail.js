@@ -82,6 +82,12 @@ class FilmDetail extends React.Component {
     this.props.dispatch(action)
   }
 
+  _toggleSeen() {
+    const action = {type: 'TOGGLE_SEEN', value: this.state.film}
+    // this.props.dispatch est possible car on a utilisé connect sur FilmDetail plus bas
+    this.props.dispatch(action)
+  }
+
   _displayFavImage() {
     var isBigImage = false
     var sourceImage = require('../Images/ic_favorite_border.png')
@@ -97,6 +103,21 @@ class FilmDetail extends React.Component {
         />
       </EnlargeShrink>
       
+    )
+  }
+  _displaySeenCheck() {
+    var isSeen = false
+    if (this.props.myMovies.findIndex(item => item.id === this.state.film.id) !== -1){
+      isSeen = true
+    }
+    return(
+      <EnlargeShrink shouldEnlarge={ isSeen }>
+        <Image
+          style={ styles.seen_icon }
+          source={ require('../Images/ic_check.png') }
+        />
+      </EnlargeShrink>
+
     )
   }
 
@@ -131,11 +152,19 @@ class FilmDetail extends React.Component {
             source={{uri: getImageFromApi(film.backdrop_path)}}
           />
           <Text style={styles.title_text}>{film.title}</Text>
-          <TouchableOpacity
-          style={styles.favorite_container}
-            onPress={() => this._toggleFavorite()}>
-              {this._displayFavImage()}
+          <View style={styles.icon_container}>
+            <TouchableOpacity
+              style={styles.favorite_container}
+              onPress={() => this._toggleFavorite()}>
+                {this._displayFavImage()}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.seen_container}
+              onPress={() => this._toggleSeen()}>
+                {this._displaySeenCheck()}
           </TouchableOpacity>
+
+          </View>
           <Text style={styles.description_text}>{film.overview}</Text>
           <Text style={styles.default_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
           <Text style={styles.default_text}>Note : {film.vote_average} / 10</Text>
@@ -208,13 +237,27 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginTop: 5,
   },
+  icon_container: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   favorite_container: {
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  seen_container: {
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   fav_image: {
     flex: 1,
     width: null,
     height: null
+  },
+  seen_icon: {
+    flex: 1,
+    width: null,
+    height: null,
   },
   share_touchable_floatingactionbutton: {
     position: 'absolute',
@@ -239,7 +282,8 @@ const styles = StyleSheet.create({
 // associer les donnees du state global aux props de FilmDetail
 const mapStateToProps = (state) => {
   return {
-    favoritesFilm: state.toggleFavorite.favoritesFilm
+    favoritesFilm: state.toggleFavorite.favoritesFilm,
+    myMovies: state.toggleSeen.myMovies
   }
 }
 export default connect(mapStateToProps)(FilmDetail)

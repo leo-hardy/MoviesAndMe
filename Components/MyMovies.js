@@ -1,10 +1,7 @@
-// Components/Favorites.js
-
 import React from 'react'
 import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import FilmList from './FilmList'
-import Avatar from './Avatar'
 
 class Favorites extends React.Component {
 
@@ -27,11 +24,8 @@ class Favorites extends React.Component {
   render() {
     return (
       <View style={styles.main_container}>
-        <View style={styles.avatar_container}>
-          <Avatar/>
-        </View>
         <FilmList
-          films={this.props.favoritesFilm} 
+          films={this.props.myMovies} 
           navigation={this.props.navigation}
           myLists={true}
         />
@@ -44,17 +38,13 @@ class Favorites extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-  },
-  avatar_container: {
-    alignItems: 'center',
-    backgroundColor: '#fdb0b0'
   }
 })
 
 
 const mapStateToProps = state => {
   return {
-    favoritesFilm: state.toggleFavorite.favoritesFilm
+    myMovies: state.toggleSeen.myMovies
   }
 }
 

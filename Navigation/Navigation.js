@@ -7,6 +7,7 @@ import Search from '../Components/Search'
 import FilmDetail from '../Components/FilmDetail'
 import Favorites from '../Components/Favorites'
 import Latests from '../Components/Latests'
+import MyMovies from '../Components/MyMovies'
 
 const SearchStackNavigator = createStackNavigator({
     Search: {
@@ -51,6 +52,24 @@ const LatestStackNavigator = createStackNavigator({
             title: "Nouveautés",
             headerStyle: {
                 backgroundColor: '#039fe4'
+            }
+        }
+    },
+    FilmDetail: {
+        screen: FilmDetail,
+        navigationOptions: {
+            title: "Fiche du film",
+        }
+    }
+})
+
+const MyMoviesStackNavigator = createStackNavigator({
+    MyMovies: {
+        screen: MyMovies,
+        navigationOptions: {
+            title: "Films vus",
+            headerStyle: {
+                backgroundColor: '#a9db19'
             }
         }
     },
@@ -108,6 +127,22 @@ const MoviesTabNavigator = createBottomTabNavigator({
                   showLabel: false,
                   showIcon: true,
                   activeBackgroundColor: '#039fe4',
+                  inactiveBackgroundColor: '#FFFFFF'
+              }
+          }
+      },
+      MyMovies: {
+        screen: MyMoviesStackNavigator,
+        navigationOptions: {
+          tabBarIcon: () => {
+              return <Image 
+                        source={require('../Images/ic_check.png')} 
+                        style={styles.icon} /> 
+              },
+              tabBarOptions: {
+                  showLabel: false,
+                  showIcon: true,
+                  activeBackgroundColor: '#a9db19',
                   inactiveBackgroundColor: '#FFFFFF'
               }
           }
