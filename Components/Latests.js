@@ -53,7 +53,8 @@ class Latests extends React.Component {
           loadFilms={this._loadFilms}
           page={this.page}
           totalPages={this.totalPages}
-          myLists={false}
+          favoriteList={false}
+          myMovies={false}
         />
         {this._displayLoading()}
       </View>

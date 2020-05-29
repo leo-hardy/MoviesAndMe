@@ -30,11 +30,12 @@ class FilmList extends React.Component {
               film={item}
               isFilmFavorite={(this.props.favoritesFilm.findIndex(film => film.id === item.id) !== -1) ? true : false}
               displayDetailForFilm={this._displayDetailForFilm}
+              myMovies={this.props.myMovies} // boolean 
             />
           )}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
-            if (!this.props.myLists && this.props.page < this.props.totalPages) {
+            if (!(this.props.favoriteList || this.props.myMovies) && this.props.page < this.props.totalPages) {
               this.props.loadFilms()
             }
           }}

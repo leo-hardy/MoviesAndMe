@@ -7,6 +7,10 @@ import FadeIn from '../Animations/FadeIn'
 
 class FilmItem extends React.Component {
 
+    constructor(props) {
+        super(props)
+    }
+
     _displayFavImage() {
         if (this.props.isFilmFavorite){
           sourceImage = require('../Images/ic_favorite.png')
@@ -26,24 +30,29 @@ class FilmItem extends React.Component {
             <FadeIn>
                 <TouchableOpacity
                     onPress={() => displayDetailForFilm(film.id)}
-                    style={styles.main_container}>
+                    style={ this.props.myMovies ? styles.main_container_bis : styles.main_container}>
                     <Image
-                        style={styles.image}
+                        style={ this.props.myMovies ? styles.image_rounded : styles.image}
                         source={{uri: getImageFromApi(film.poster_path)}}
                     />
                     <View style={styles.content_container}>
                         <View style={styles.header_container}>
                             {this._displayFavImage()}
                             <Text style={styles.title_text}>{film.title}</Text>
-                            <Text style={styles.vote_text}>{film.vote_average}</Text>
+                            { !this.props.myMovies &&
+                                <Text style={styles.vote_text}>{film.vote_average}</Text>
+                            }
                         </View>
-                        <View style={styles.description_container}>
-                            <Text style={styles.description_text} numberOfLines={6}>{film.overview}</Text>
-                            {/* La propriété numberOfLines permet de couper un texte si celui-ci est trop long, il suffit de définir un nombre maximum de ligne */}
-                        </View>
-                        <View style={styles.date_container}>
-                            <Text style={styles.date_text}>{film.release_date}</Text>
-                        </View>
+                        { !this.props.myMovies &&
+                                <View style={styles.description_container}>
+                                    <Text style={styles.description_text} numberOfLines={6}>{film.overview}</Text>
+                                    {/* La propriété numberOfLines permet de couper un texte si celui-ci est trop long, il suffit de définir un nombre maximum de ligne */}
+                                </View>
+                        }{ !this.props.myMovies &&
+                                <View style={styles.date_container}>
+                                    <Text style={styles.date_text}>{film.release_date}</Text>
+                                </View>
+                        }
                     </View>
                 </TouchableOpacity>
             </FadeIn>
@@ -53,12 +62,19 @@ class FilmItem extends React.Component {
 
 const styles = StyleSheet.create({
     main_container: {
-        height: 190,
+        height:  190,
         flexDirection: 'row',
         backgroundColor: 'white',
         borderWidth: 0.5,
         borderColor: 'black',
         opacity: 0.7
+    },
+    main_container_bis: {
+        height:  110,
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        opacity: 0.7,
+        justifyContent: 'center'
     },
     image: {
         width: 120,
@@ -66,9 +82,16 @@ const styles = StyleSheet.create({
         margin: 5,
         backgroundColor: 'gray',
     },
+    image_rounded: {
+        width: 100,
+        height: 100,
+        margin: 5,
+        borderRadius: 50,
+        backgroundColor: 'gray',
+    },
     content_container: {
         flex: 1,
-        margin: 5
+        margin: 5,
     },
     header_container: {
         flex: 3,
