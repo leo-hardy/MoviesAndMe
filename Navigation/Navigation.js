@@ -6,6 +6,7 @@ import {createBottomTabNavigator } from 'react-navigation-tabs'
 import Search from '../Components/Search'
 import FilmDetail from '../Components/FilmDetail'
 import Favorites from '../Components/Favorites'
+import Latests from '../Components/Latests'
 
 const SearchStackNavigator = createStackNavigator({
     Search: {
@@ -32,6 +33,24 @@ const FavoriteStackNavigator = createStackNavigator({
             title: "Favoris",
             headerStyle: {
                 backgroundColor: '#fc6362'
+            }
+        }
+    },
+    FilmDetail: {
+        screen: FilmDetail,
+        navigationOptions: {
+            title: "Fiche du film",
+        }
+    }
+})
+
+const LatestStackNavigator = createStackNavigator({
+    Latests: {
+        screen: Latests,
+        navigationOptions: {
+            title: "Nouveautés",
+            headerStyle: {
+                backgroundColor: '#039fe4'
             }
         }
     },
@@ -76,8 +95,26 @@ const MoviesTabNavigator = createBottomTabNavigator({
                 inactiveBackgroundColor: '#FFFFFF'
             }
         }
-    }
+    },
+    Latests: {
+        screen: LatestStackNavigator,
+        navigationOptions: {
+          tabBarIcon: () => {
+              return <Image 
+                        source={require('../Images/ic_new.png')} 
+                        style={styles.icon} /> 
+              },
+              tabBarOptions: {
+                  showLabel: false,
+                  showIcon: true,
+                  activeBackgroundColor: '#039fe4',
+                  inactiveBackgroundColor: '#FFFFFF'
+              }
+          }
+      }
 })
+
+
 
   const styles = StyleSheet.create({
       icon: {

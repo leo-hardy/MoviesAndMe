@@ -17,3 +17,11 @@ export function getFilmDetailFromApi(id) {
         .then((response) => response.json())
         .catch((error) => console.error(error))
 }
+
+export function getLatestFilms(page) {
+    //vote_count.gte=100 pour avoir les films un minimum importants
+    const url = 'https://api.themoviedb.org/3/discover/movie?api_key='+API_TOKEN+'&language=fr&sort_by=release_date.desc&include_adult=false&vote_count.gte=100&page=' + page
+    return fetch(url)
+        .then((response) => response.json())
+        .catch((error) => console.error(error))
+}
